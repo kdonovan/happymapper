@@ -529,7 +529,6 @@ describe HappyMapper do
     tree.persons.person.first.version.should == '1199378491000'
     tree.persons.person.first.modified.should == Time.utc(2008, 1, 3, 16, 41, 31) # 2008-01-03T09:41:31-07:00
     tree.persons.person.first.id.should == 'KWQS-BBQ'
-    # failing specs
     tree.persons.person.first.information.alternateIds.ids.should_not be_kind_of(String)
     tree.persons.person.first.information.alternateIds.ids.size.should == 8
   end
