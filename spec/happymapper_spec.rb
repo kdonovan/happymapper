@@ -506,14 +506,14 @@ describe HappyMapper do
     track.tran_detail.cust_tran_id.should == '20090102-111321'
   end
   
-  xit "should parse family search xml" do
+  it "should parse family search xml" do
     tree = FamilySearch::FamilyTree.parse(fixture_file('family_tree.xml'))
     tree.version.should == '1.0.20071213.942'
     tree.status_message.should == 'OK'
     tree.status_code.should == '200'
-    # tree.people.size.should == 1
-    # tree.people.first.version.should == '1199378491000'
-    # tree.people.first.modified.should == Time.utc(2008, 1, 3, 16, 41, 31) # 2008-01-03T09:41:31-07:00
-    # tree.people.first.id.should == 'KWQS-BBQ'
+    tree.persons.person.size.should == 1
+    tree.persons.person.first.version.should == '1199378491000'
+    tree.persons.person.first.modified.should == Time.utc(2008, 1, 3, 16, 41, 31) # 2008-01-03T09:41:31-07:00
+    tree.persons.person.first.id.should == 'KWQS-BBQ'
   end
 end
