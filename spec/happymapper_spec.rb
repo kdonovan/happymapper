@@ -35,12 +35,26 @@ class Product
 end
 
 module FamilySearch
+  class AlternateIds
+    include HappyMapper
+    
+    tag 'alternateIds'
+    has_many :ids, String, :tag => 'id'
+  end
+  
+  class Information
+    include HappyMapper
+    
+    has_one :alternateIds, AlternateIds
+  end
+  
   class Person
     include HappyMapper
     
     attribute :version, String
     attribute :modified, Time
     attribute :id, String
+    has_one :information, Information
   end
   
   class Persons
@@ -515,5 +529,8 @@ describe HappyMapper do
     tree.persons.person.first.version.should == '1199378491000'
     tree.persons.person.first.modified.should == Time.utc(2008, 1, 3, 16, 41, 31) # 2008-01-03T09:41:31-07:00
     tree.persons.person.first.id.should == 'KWQS-BBQ'
+    # failing specs
+    tree.persons.person.first.information.alternateIds.ids.should_not be_kind_of(String)
+    tree.persons.person.first.information.alternateIds.ids.size.should == 8
   end
 end
