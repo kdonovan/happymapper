@@ -17,7 +17,7 @@ module HappyMapper
       self.name = name.to_s
       self.type = type
       self.tag = o.delete(:tag) || name.to_s
-      self.options = o
+      self.options = {:single => true }.merge o
       
       @xml_type = self.class.to_s.split('::').last.downcase
     end
@@ -119,28 +119,40 @@ module HappyMapper
         end
 
         if element?
-          result = node.find_first(xpath(namespace))
-          # puts "vfxn: #{xpath} #{result.inspect}"
-          if result
-            value = yield(result)
-            if options[:attributes].is_a?(Hash)
-              result.attributes.each do |xml_attribute|
-                if attribute_options = options[:attributes][xml_attribute.name.to_sym]
-                  attribute_value = Attribute.new(xml_attribute.name.to_sym, *attribute_options).from_xml_node(result, namespace)
-                  result.instance_eval <<-EOV
-                    def value.#{xml_attribute.name}
-                      #{attribute_value.inspect}
-                    end
-                  EOV
-                end
-              end
+          if options[:single]
+            result = node.find_first(xpath(namespace))
+            if result
+              value = yield(result)
+              handle_attributes_option(result,value)
+              value
+            else
+              nil
             end
-            value
           else
-            nil
+            results = node.find(xpath(namespace)).collect do |result|
+              value = yield(result)
+              handle_attributes_option(result,value)
+              value
+            end
+            results
           end
         else
           yield(node[tag])
+        end
+      end
+      
+      def handle_attributes_option(result, value)
+        if options[:attributes].is_a?(Hash)
+          result.attributes.each do |xml_attribute|
+            if attribute_options = options[:attributes][xml_attribute.name.to_sym]
+              attribute_value = Attribute.new(xml_attribute.name.to_sym, *attribute_options).from_xml_node(result, namespace)
+              result.instance_eval <<-EOV
+                def value.#{xml_attribute.name}
+                  #{attribute_value.inspect}
+                end
+              EOV
+            end
+          end
         end
       end
   end
