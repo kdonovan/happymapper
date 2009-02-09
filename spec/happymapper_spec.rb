@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/spec_helper.rb'
+require File.dirname(__FILE__) + '/xml_helper.rb'
 require 'pp'
 require 'uri'
 
@@ -174,6 +175,14 @@ class Post
   attribute :time, Time
   attribute :others, Integer
   attribute :extended, String
+end
+
+class Posts
+  include HappyMapper
+  
+  attribute :user, String
+  attribute :tag, String
+  has_many :post, Post
 end
 
 class User  
@@ -531,5 +540,45 @@ describe HappyMapper do
     tree.persons.person.first.id.should == 'KWQS-BBQ'
     tree.persons.person.first.information.alternateIds.ids.should_not be_kind_of(String)
     tree.persons.person.first.information.alternateIds.ids.size.should == 8
+  end
+  
+  describe "serializing to xml" do
+    
+    it "should return xml with elements representing the objects" do
+      address = Address.parse(fixture_file('address.xml'), :single => true)
+      xml = address.to_xml
+      xml.should be_kind_of(String)
+      # Would love to use libxml-ruby if xml_helper.rb were converted
+      doc = REXML::Document.new xml 
+      doc.should have_nodes("/address", 1)
+      doc.should have_nodes("/address/street", 1)
+      doc.should match_xpath("/address/street","Milchstrasse")
+      doc.should match_xpath("/address/housenumber","23")
+      doc.should match_xpath("/address/postcode","26131")
+      doc.should match_xpath("/address/city","Oldenburg")
+      doc.should match_xpath("/address/country","Germany")
+    end
+    
+    it "should return xml with non-primitive elements from ruby objects" do
+      posts = Posts.parse(fixture_file('posts.xml'))
+      xml = posts.to_xml
+      doc = REXML::Document.new xml
+      doc.should have_nodes("/posts",1)
+      doc.should have_nodes("/posts/post",20)
+    end
+    
+    it "should return xml with attributes representing 'attribute' objects" do
+      posts = Posts.parse(fixture_file('posts.xml'))
+      xml = posts.to_xml
+      doc = REXML::Document.new xml
+      doc.should have_nodes("/posts/post",20)
+      doc.should match_xpath("/posts/post[1]/@href","http://roxml.rubyforge.org/")
+      doc.should match_xpath("/posts/post[1]/@hash","19bba2ab667be03a19f67fb67dc56917")
+      doc.should match_xpath("/posts/post[1]/@description","ROXML - Ruby Object to XML Mapping Library")
+      doc.should match_xpath("/posts/post[1]/@tag","ruby xml gems mapping")
+      doc.should match_xpath("/posts/post[1]/@others","56")
+      doc.should match_xpath("/posts/post[1]/@extended","ROXML is a Ruby library designed to make it easier for Ruby developers to work with XML. Using simple annotations, it enables Ruby classes to be custom-mapped to XML. ROXML takes care of the marshalling and unmarshalling of mapped attributes so that developers can focus on building first-class Ruby classes.")      
+    end
+    
   end
 end

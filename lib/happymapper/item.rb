@@ -52,6 +52,16 @@ module HappyMapper
       end
     end
     
+    def to_xml_node(value)
+      if primitive?
+        node = XML::Node.new(@tag)
+        node << value.to_s
+        node
+      else
+        value.to_xml_node
+      end      
+    end
+    
     def xpath(namespace = self.namespace)
       xpath  = ''
       xpath += './/' if options[:deep]

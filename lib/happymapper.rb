@@ -18,6 +18,28 @@ module HappyMapper
     base.instance_variable_set("@elements", {})
     base.extend ClassMethods
   end
+  
+  def to_xml
+    node = to_xml_node
+    node.to_s
+  end
+  
+  def to_xml_node
+    node = XML::Node.new(self.class.tag_name)
+    self.class.elements.each do |e|
+      if e.options[:single] == false
+        self.send("#{e.method_name}").each do |array_element|
+          node << e.to_xml_node(array_element)
+        end
+      else
+        node << e.to_xml_node(self.send("#{e.method_name}"))
+      end
+    end
+    self.class.attributes.each do |a|
+      node.attributes[a.tag] = self.send("#{a.method_name}").to_s
+    end
+    node
+  end
 
   module ClassMethods
     def attribute(name, type, options={})
