@@ -58,6 +58,15 @@ module HappyMapper
       @elements[to_s] ||= []
       @elements[to_s] << element
       attr_accessor element.method_name.intern
+      
+      # set the default value of a collection instance variable to [] instead of nil
+      if options[:single] == false
+        module_eval <<-eof
+          def #{element.method_name}
+            @#{element.method_name} ||= []
+          end
+        eof
+      end
     end
 
     def elements

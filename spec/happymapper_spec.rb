@@ -580,5 +580,19 @@ describe HappyMapper do
       doc.should match_xpath("/posts/post[1]/@extended","ROXML is a Ruby library designed to make it easier for Ruby developers to work with XML. Using simple annotations, it enables Ruby classes to be custom-mapped to XML. ROXML takes care of the marshalling and unmarshalling of mapped attributes so that developers can focus on building first-class Ruby classes.")      
     end
     
+    it "should be able to create new objects and serialize to xml" do
+      posts = Posts.new
+      posts.user = 'jimmyz'
+      posts.tag = 'happymapper'
+      posts.post << Post.new
+      posts.post << Post.new
+      xml = posts.to_xml
+      doc = REXML::Document.new xml
+      doc.should have_nodes("/posts",1)
+      doc.should have_nodes("/posts/post", 2)
+      doc.should match_xpath("/posts/@user",'jimmyz')
+      doc.should match_xpath("/posts/@tag",'happymapper')
+    end
+    
   end
 end
