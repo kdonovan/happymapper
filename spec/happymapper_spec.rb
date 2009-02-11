@@ -594,5 +594,14 @@ describe HappyMapper do
       doc.should match_xpath("/posts/@tag",'happymapper')
     end
     
+    it "should not serialize attributes or elements that are nil" do
+      posts = Posts.new
+      xml = posts.to_xml
+      doc = REXML::Document.new xml
+      doc.should have_nodes("/posts",1)
+      doc.should have_nodes("/posts/post",0)
+      doc.should have_nodes("/posts/@user",0)
+    end
+    
   end
 end

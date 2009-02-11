@@ -36,7 +36,8 @@ module HappyMapper
       end
     end
     self.class.attributes.each do |a|
-      node.attributes[a.tag] = self.send("#{a.method_name}").to_s
+      attribute_value = self.send("#{a.method_name}")
+      node.attributes[a.tag] = attribute_value.to_s unless attribute_value.nil? 
     end
     node
   end
