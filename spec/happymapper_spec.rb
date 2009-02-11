@@ -542,6 +542,18 @@ describe HappyMapper do
     tree.persons.person.first.information.alternateIds.ids.size.should == 8
   end
   
+  it "should not set values for missing attributes" do
+    posts = Post.parse(fixture_file("partial_posts.xml"))
+    first = posts.first
+    first.href.should be_nil
+    first.hash.should be_nil
+    first.description.should be_nil
+    first.tag.should be_nil
+    first.time.should be_nil
+    first.others.should be_nil
+    first.extended.should be_nil
+  end
+  
   describe "serializing to xml" do
     
     it "should return xml with elements representing the objects" do

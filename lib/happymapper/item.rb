@@ -147,7 +147,7 @@ module HappyMapper
             results
           end
         else
-          yield(node[tag])
+          yield(node[tag]) unless node[tag].nil?
         end
       end
       
