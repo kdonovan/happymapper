@@ -39,6 +39,7 @@ module FamilySearch
   class AlternateIds
     include HappyMapper
     
+    namespace_url 'http://api.familysearch.org/v1'
     tag 'alternateIds'
     has_many :ids, String, :tag => 'id'
   end
@@ -46,7 +47,10 @@ module FamilySearch
   class Information
     include HappyMapper
     
+    namespace_url 'http://api.familysearch.org/v1'
     has_one :alternateIds, AlternateIds
+    element :gender, String 
+    element :living, Boolean
   end
   
   class Person
@@ -60,6 +64,7 @@ module FamilySearch
   
   class Persons
     include HappyMapper
+    
     has_many :person, Person
   end
   
@@ -348,6 +353,12 @@ describe HappyMapper do
       Foo.namespace(namespace = "foo")
       Foo.namespace.should == namespace
     end
+    
+    # Prefixes might change for a given namespace. It is safer to namespace by url.
+    it "should allow setting a namespace url" do
+      Foo.namespace_url(url = 'http://example.com/namespace')
+      Foo.namespace_url.should == url
+    end
 
     it "should provide #parse" do
       Foo.should respond_to(:parse)
@@ -538,8 +549,11 @@ describe HappyMapper do
     tree.persons.person.first.version.should == '1199378491000'
     tree.persons.person.first.modified.should == Time.utc(2008, 1, 3, 16, 41, 31) # 2008-01-03T09:41:31-07:00
     tree.persons.person.first.id.should == 'KWQS-BBQ'
+    # namespaced elements (by url)
     tree.persons.person.first.information.alternateIds.ids.should_not be_kind_of(String)
     tree.persons.person.first.information.alternateIds.ids.size.should == 8
+    tree.persons.person.first.information.gender.should == 'Male'
+    tree.persons.person.first.information.living.should == false
   end
   
   it "should not set values for missing attributes" do

@@ -89,6 +89,11 @@ module HappyMapper
       @namespace = namespace if namespace
       @namespace
     end
+    
+    def namespace_url(url = nil)
+      @namespace_url = url if url
+      @namespace_url
+    end
 
     def tag(new_tag_name)
       @tag_name = new_tag_name.to_s
@@ -117,7 +122,9 @@ module HappyMapper
       # This is the entry point into the parsing pipeline, so the default
       # namespace prefix registered here will propagate down
       namespaces = node.namespaces
-      if namespaces && namespaces.default
+      if @namespace_url
+        namespace = namespaces.find_by_href(@namespace_url).prefix
+      elsif namespaces && namespaces.default
         # don't assign the default_prefix if it has already been assigned
         namespaces.default_prefix = DEFAULT_NS unless namespaces.find_by_prefix(DEFAULT_NS)
         namespace ||= DEFAULT_NS

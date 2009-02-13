@@ -2,20 +2,20 @@
 <familytree xmlns="http://api.familysearch.org/familytree/v1" xmlns:fsapi-v1="http://api.familysearch.org/v1" version="1.0.20071213.942" statusMessage="OK" statusCode="200">
 	<persons>
 		<person version="1199378491000" modified="2008-01-03T09:41:31-07:00" id="KWQS-BBQ">
-			<information>
-				<alternateIds>
-					<id>gedcom.1B5E3087E36D814FA9CBE0BE5B3721EA</id>
-					<id>KWQS-BB3</id>
-					<id>KWQS-W23</id>
-					<id>KWQS-W2S</id>
-					<id>KWQS-W29</id>
-					<id>KWQM-MMM</id>
-					<id>KWQS-W2Q</id>
-					<id>KWQS-BBQ</id>
-				</alternateIds>
-				<gender>Male</gender>
-				<living>false</living>
-			</information>
+			<fsapi-v1:information>
+				<fsapi-v1:alternateIds>
+					<fsapi-v1:id>gedcom.1B5E3087E36D814FA9CBE0BE5B3721EA</fsapi-v1:id>
+					<fsapi-v1:id>KWQS-BB3</fsapi-v1:id>
+					<fsapi-v1:id>KWQS-W23</fsapi-v1:id>
+					<fsapi-v1:id>KWQS-W2S</fsapi-v1:id>
+					<fsapi-v1:id>KWQS-W29</fsapi-v1:id>
+					<fsapi-v1:id>KWQM-MMM</fsapi-v1:id>
+					<fsapi-v1:id>KWQS-W2Q</fsapi-v1:id>
+					<fsapi-v1:id>KWQS-BBQ</fsapi-v1:id>
+				</fsapi-v1:alternateIds>
+				<fsapi-v1:gender>Male</fsapi-v1:gender>
+				<fsapi-v1:living>false</fsapi-v1:living>
+			</fsapi-v1:information>
 		</person>
 	</persons>
 </familytree>
