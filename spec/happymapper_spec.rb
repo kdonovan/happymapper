@@ -39,7 +39,7 @@ module FamilySearch
   class AlternateIds
     include HappyMapper
     
-    namespace_url 'http://api.familysearch.org/v1'
+    namespace 'fsapi-v1' => 'http://api.familysearch.org/v1'
     tag 'alternateIds'
     has_many :ids, String, :tag => 'id'
   end
@@ -352,6 +352,13 @@ describe HappyMapper do
     it "should allow setting a namespace" do
       Foo.namespace(namespace = "foo")
       Foo.namespace.should == namespace
+    end
+    
+    # This is important for allowing serializing of elements with namespaces
+    it "should allow setting a full namespace (prefix and url) via a hash" do
+      Foo.namespace(namespace = {'example-v1' => 'http://example.com/v1'})
+      Foo.namespace.should == 'example-v1'
+      Foo.namespace_url.should == 'http://example.com/v1'
     end
     
     # Prefixes might change for a given namespace. It is safer to namespace by url.

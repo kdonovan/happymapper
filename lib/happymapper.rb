@@ -85,8 +85,19 @@ module HappyMapper
     # Specify a namespace if a node and all its children are all namespaced
     # elements. This is simpler than passing the :namespace option to each
     # defined element.
+    #
+    # namespace can either be a string for the prefix or a hash with 'prefix' => 'url'
     def namespace(namespace = nil)
-      @namespace = namespace if namespace
+      if namespace
+        if namespace.is_a? Hash
+          namespace.each_pair do |k,v|
+            @namespace = k.to_s
+            @namespace_url = v
+          end
+        else  
+          @namespace = namespace 
+        end
+      end
       @namespace
     end
     
