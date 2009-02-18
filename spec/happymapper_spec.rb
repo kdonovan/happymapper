@@ -47,7 +47,7 @@ module FamilySearch
   class Information
     include HappyMapper
     
-    namespace_url 'http://api.familysearch.org/v1'
+    namespace 'fsapi-v1' => 'http://api.familysearch.org/v1'
     has_one :alternateIds, AlternateIds
     element :gender, String 
     element :living, Boolean
@@ -56,6 +56,7 @@ module FamilySearch
   class Person
     include HappyMapper
     
+    namespace_url 'http://api.familysearch.org/familytree/v1'
     attribute :version, String
     attribute :modified, Time
     attribute :id, String
@@ -65,6 +66,7 @@ module FamilySearch
   class Persons
     include HappyMapper
     
+    namespace_url 'http://api.familysearch.org/familytree/v1'
     has_many :person, Person
   end
   
@@ -72,6 +74,7 @@ module FamilySearch
     include HappyMapper
     
     tag 'familytree'
+    namespace_url 'http://api.familysearch.org/familytree/v1'
     attribute :version, String
     attribute :status_message, String, :tag => 'statusMessage'
     attribute :status_code, String, :tag => 'statusCode'
@@ -634,6 +637,29 @@ describe HappyMapper do
       doc.should have_nodes("/posts",1)
       doc.should have_nodes("/posts/post",0)
       doc.should have_nodes("/posts/@user",0)
+    end
+    
+    describe "with namespace url and prefix" do
+      before(:all) do
+        ft = FamilySearch::FamilyTree.parse(fixture_file('family_tree.xml'))
+        xml = ft.to_xml
+        @doc = REXML::Document.new xml
+        @namespaces = {
+          'fsapi-v1' => 'http://api.familysearch.org/v1', 
+          'fs' => 'http://api.familysearch.org/familytree/v1'
+        }
+      end
+      
+      it "should add namespaces to the root element that is being serialized" do
+        @doc.should match_xpath("/fs:familytree/@xmlns:fsapi-v1",'http://api.familysearch.org/v1',@namespaces)
+      end
+
+      it "should serialize elements with a namespace url and prefix" do
+        base_xpath = "/fs:familytree/fs:persons/fs:person[1]"
+        @doc.should have_nodes("#{base_xpath}/fsapi-v1:information",1,@namespaces)
+        @doc.should have_nodes("#{base_xpath}/fsapi-v1:information/fsapi-v1:alternateIds",1,@namespaces)
+        @doc.should have_nodes("#{base_xpath}/fsapi-v1:information/fsapi-v1:alternateIds/fsapi-v1:id",8,@namespaces)
+      end
     end
     
   end

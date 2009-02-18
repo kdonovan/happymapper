@@ -17,6 +17,7 @@ module HappyMapper
       self.name = name.to_s
       self.type = type
       self.tag = o.delete(:tag) || name.to_s
+      self.namespace = o.delete(:namespace)
       self.options = {:single => true }.merge o
       
       @xml_type = self.class.to_s.split('::').last.downcase
@@ -52,14 +53,19 @@ module HappyMapper
       end
     end
     
-    def to_xml_node(value)
+    def to_xml_node(value, root_node = nil)
       if primitive?
         node = XML::Node.new(@tag)
         node << value.to_s
+        # assign a namespace
+        if @namespace && root_node
+          namespace_object = root_node.namespaces.find_by_prefix @namespace
+          node.namespaces.namespace = namespace_object
+        end
         node
       else
-        value.to_xml_node
-      end      
+        value.to_xml_node(root_node)
+      end
     end
     
     def xpath(namespace = self.namespace)

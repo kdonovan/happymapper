@@ -24,15 +24,25 @@ module HappyMapper
     node.to_s
   end
   
-  def to_xml_node
+  def to_xml_node(root_node = nil)
     node = XML::Node.new(self.class.tag_name)
+    root_node ||= node
+    if self.class.namespace_url
+      if root_node
+        namespace_object = root_node.namespaces.find_by_href(self.class.namespace_url)
+        namespace_object ||= XML::Namespace.new root_node, self.class.namespace, self.class.namespace_url
+        node.namespaces.namespace = namespace_object
+      end
+    else
+      nil
+    end
     self.class.elements.each do |e|
       if e.options[:single] == false
         self.send("#{e.method_name}").each do |array_element|
-          node << e.to_xml_node(array_element)
+          node << e.to_xml_node(array_element,root_node)
         end
       else
-        node << e.to_xml_node(self.send("#{e.method_name}"))
+        node << e.to_xml_node(self.send("#{e.method_name}"),root_node)
       end
     end
     self.class.attributes.each do |a|
@@ -55,6 +65,7 @@ module HappyMapper
     end
 
     def element(name, type, options={})
+      options = {:namespace => @namespace}.merge(options)
       element = Element.new(name, type, options)
       @elements[to_s] ||= []
       @elements[to_s] << element
@@ -133,7 +144,7 @@ module HappyMapper
       # This is the entry point into the parsing pipeline, so the default
       # namespace prefix registered here will propagate down
       namespaces = node.namespaces
-      if @namespace_url
+      if @namespace_url && namespaces.default.href != @namespace_url
         namespace = namespaces.find_by_href(@namespace_url).prefix
       elsif namespaces && namespaces.default
         # don't assign the default_prefix if it has already been assigned

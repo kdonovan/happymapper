@@ -8,12 +8,14 @@ module FamilySearch
     include HappyMapper
     
     tag 'alternateIds'
+    namespace 'fsapi-v1' => 'http://api.familysearch.org/v1'
     has_many :ids, String, :tag => 'id'
   end
   
   class Information
     include HappyMapper
     
+    namespace 'fsapi-v1' => 'http://api.familysearch.org/v1'
     has_one :alternateIds, AlternateIds
   end
   

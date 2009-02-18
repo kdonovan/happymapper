@@ -84,15 +84,16 @@ module Spec
 
     # checks if the given xpath occurs num times
     class HaveNodes  #:nodoc:
-      def initialize(xpath, num)
+      def initialize(xpath, num, namespaces = nil)
         @xpath= xpath
         @num = num
+        @namespaces = namespaces
       end
 
       def matches?(response)
         @response = response
         doc = response.is_a?(REXML::Document) ? response : REXML::Document.new(@response)
-        match = REXML::XPath.match(doc, @xpath)
+        match = REXML::XPath.match(doc, @xpath, @namespaces)
         @num_found= match.size
         @num_found == @num
       end
@@ -106,8 +107,8 @@ module Spec
       end
     end
 
-    def have_nodes(xpath, num)
-      HaveNodes.new(xpath, num)
+    def have_nodes(xpath, num, namespaces = nil)
+      HaveNodes.new(xpath, num, namespaces)
     end
 
   end
