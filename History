@@ -1,3 +1,14 @@
+== 0.3.0
+* X major enhancements, 1 minor enhancements, 1 bug fixes
+  * to_xml methods attach namespaces to the root element and add the namespaces to the elements (if a namespace_url is specified) 
+	* Modified namespace method to accept a hash {'prefix' => 'http://example.com/v1'} OR 'prefix'
+	* Added namespace_url method to set and read a full namespace URL. This adds much better stability in case prefixes change.
+	* Added to_xml method to HappyMapper Module to serialize objects to string
+	* Added to_xml_node method to HappyMapper Module to serialize objects to LibXML::XML::Node 
+	* Full support for creating happymapper elements from scratch. has_many instance vars default to []
+	* Support for has_many with a primitive type (String, Boolean, etc.)
+	* fix for issue #8: http://jnunemaker.lighthouseapp.com/projects/20014-happy-mapper/tickets/8
+
 == 0.2.2
 * 2 minor tweaks
   * removed GC.start (libxml recommended this) as setting nodes to nil should be enough, specs run 3-4x faster (Brandon Keepers)

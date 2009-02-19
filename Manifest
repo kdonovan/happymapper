@@ -1,6 +1,7 @@
 examples/amazon.rb
 examples/current_weather.rb
 examples/dashed_elements.rb
+examples/family_tree.rb
 examples/post.rb
 examples/twitter.rb
 happymapper.gemspec
@@ -19,6 +20,7 @@ spec/fixtures/commit.xml
 spec/fixtures/current_weather.xml
 spec/fixtures/family_tree.xml
 spec/fixtures/multiple_namespaces.xml
+spec/fixtures/partial_posts.xml
 spec/fixtures/pita.xml
 spec/fixtures/posts.xml
 spec/fixtures/product_default_namespace.xml
@@ -32,6 +34,7 @@ spec/happymapper_item_spec.rb
 spec/happymapper_spec.rb
 spec/spec.opts
 spec/spec_helper.rb
+spec/xml_helper.rb
 TODO
 website/css/common.css
 website/index.html
