@@ -1,5 +1,9 @@
+== 0.3.1
+* 1 minor tweak
+	* Added to_xml and namespace_url code to the family_tree.rb example
+
 == 0.3.0
-* X major enhancements, 1 minor enhancements, 1 bug fixes
+* 5 major enhancements, 2 minor enhancements, 1 bug fixes
   * to_xml methods attach namespaces to the root element and add the namespaces to the elements (if a namespace_url is specified) 
 	* Modified namespace method to accept a hash {'prefix' => 'http://example.com/v1'} OR 'prefix'
 	* Added namespace_url method to set and read a full namespace URL. This adds much better stability in case prefixes change.

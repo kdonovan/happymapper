@@ -22,6 +22,7 @@ module FamilySearch
   class Person
     include HappyMapper
     
+    namespace_url 'http://api.familysearch.org/familytree/v1'
     attribute :version, String
     attribute :modified, Time
     attribute :id, String
@@ -30,6 +31,8 @@ module FamilySearch
   
   class Persons
     include HappyMapper
+    
+    namespace_url 'http://api.familysearch.org/familytree/v1'
     has_many :person, Person
   end
   
@@ -37,6 +40,7 @@ module FamilySearch
     include HappyMapper
     
     tag 'familytree'
+    namespace_url 'http://api.familysearch.org/familytree/v1'
     attribute :version, String
     attribute :status_message, String, :tag => 'statusMessage'
     attribute :status_code, String, :tag => 'statusCode'
@@ -48,3 +52,4 @@ familytree = FamilySearch::FamilyTree.parse(file_contents)
 familytree.persons.person.each do |p|
   puts p.id, p.information.alternateIds.ids, ''
 end
+puts familytree.to_xml
