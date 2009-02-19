@@ -1,3 +1,7 @@
+== 0.3.2
+* 1 bug fix
+	* to_xml_node was blowing up if a non-primitive element was nil. Fixed (jimmyz) 
+
 == 0.3.1
 * 1 minor tweak
 	* Added to_xml and namespace_url code to the family_tree.rb example

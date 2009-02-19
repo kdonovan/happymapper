@@ -64,7 +64,7 @@ module HappyMapper
         end
         node
       else
-        value.to_xml_node(root_node)
+        value.to_xml_node(root_node) unless value.nil?
       end
     end
     

@@ -639,6 +639,14 @@ describe HappyMapper do
       doc.should have_nodes("/posts/@user",0)
     end
     
+    it "should not serialize elements that are nil" do
+      ft = FamilySearch::FamilyTree.new
+      #ft has nil persons element should not raise error
+      lambda{
+        ft.to_xml
+      }.should_not raise_error
+    end
+    
     describe "with namespace url and prefix" do
       before(:all) do
         ft = FamilySearch::FamilyTree.parse(fixture_file('family_tree.xml'))
