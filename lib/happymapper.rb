@@ -155,7 +155,7 @@ module HappyMapper
         namespace ||= DEFAULT_NS
       end
 
-      xpath = root ? '/' : './/'
+      xpath = root ? '/' : (options[:deep]) ? './/' : './'
       xpath += "#{namespace}:" if namespace
       xpath += tag_name
       # puts "parse: #{xpath}"

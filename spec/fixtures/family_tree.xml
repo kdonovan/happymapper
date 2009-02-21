@@ -16,6 +16,8 @@
 				<fsapi-v1:gender>Male</fsapi-v1:gender>
 				<fsapi-v1:living>false</fsapi-v1:living>
 			</fsapi-v1:information>
+			<!-- element to make sure that we're not parsing deep when not supposed to -->
+			<person id="KWQS-BBR" />
 		</person>
 	</persons>
 </familytree>

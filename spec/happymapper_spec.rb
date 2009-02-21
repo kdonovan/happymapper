@@ -170,7 +170,8 @@ end
 
 class Radar
   include HappyMapper
-  has_many :places, Place
+  # places needs to be deep because it lives out in places/place
+  has_many :places, Place, :deep => true
 end
 
 class Post
@@ -548,6 +549,12 @@ describe HappyMapper do
     last_event.address.state.should == 'FL'
     last_event.address.zip.should == '327506398'
     track.tran_detail.cust_tran_id.should == '20090102-111321'
+  end
+  
+  it "should not parse deep for elements unless deep option is set" do
+    tree = FamilySearch::FamilyTree.parse(fixture_file('family_tree.xml'))
+    tree.persons.person.size.should_not == 2
+    tree.persons.person.size.should == 1
   end
   
   it "should parse family search xml" do
