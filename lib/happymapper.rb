@@ -27,6 +27,7 @@ module HappyMapper
   def to_xml_node(root_node = nil)
     node = XML::Node.new(self.class.tag_name)
     root_node ||= node
+    # add namespace to node and to root_element if not already set
     if self.class.namespace_url
       if root_node
         namespace_object = root_node.namespaces.find_by_href(self.class.namespace_url)
@@ -34,6 +35,7 @@ module HappyMapper
         node.namespaces.namespace = namespace_object
       end
     end
+    # serialize elements
     self.class.elements.each do |e|
       if e.options[:single] == false
         self.send("#{e.method_name}").each do |array_element|
@@ -44,6 +46,7 @@ module HappyMapper
         node << e.to_xml_node(element_value,root_node) unless element_value.nil?
       end
     end
+    # serialize attributes
     self.class.attributes.each do |a|
       attribute_value = self.send("#{a.method_name}")
       node.attributes[a.tag] = attribute_value.to_s unless attribute_value.nil? 
