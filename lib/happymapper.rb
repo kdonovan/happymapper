@@ -33,8 +33,6 @@ module HappyMapper
         namespace_object ||= XML::Namespace.new root_node, self.class.namespace, self.class.namespace_url
         node.namespaces.namespace = namespace_object
       end
-    else
-      nil
     end
     self.class.elements.each do |e|
       if e.options[:single] == false
@@ -42,7 +40,8 @@ module HappyMapper
           node << e.to_xml_node(array_element,root_node)
         end
       else
-        node << e.to_xml_node(self.send("#{e.method_name}"),root_node)
+        element_value = self.send("#{e.method_name}")
+        node << e.to_xml_node(element_value,root_node) unless element_value.nil?
       end
     end
     self.class.attributes.each do |a|

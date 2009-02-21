@@ -645,6 +645,13 @@ describe HappyMapper do
       lambda{
         ft.to_xml
       }.should_not raise_error
+      
+      # Check for nil elements of primitive type 
+      info = FamilySearch::Information.new
+      namespace = {'fsapi-v1' => 'http://api.familysearch.org/v1'}
+      doc = REXML::Document.new info.to_xml
+      doc.should have_nodes("/fsapi-v1:information/fsapi-v1:gender",0,namespace)
+      doc.should have_nodes("/fsapi-v1:information/fsapi-v1:living",0,namespace)
     end
     
     describe "with namespace url and prefix" do
