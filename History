@@ -1,3 +1,9 @@
+== 0.3.3
+* 1 bug fix 2 minor enhancements
+	* Don't serialize nil elements of primitive type (jimmyz)
+	* Added the xml version/encoding header to serialized xml string on to_xml (jimmyz)
+	* Bug fix: Don't parse deep on non-primitive elements unless :deep => true (jimmyz)
+
 == 0.3.2
 * 1 bug fix
 	* to_xml_node was blowing up if a non-primitive element was nil. Fixed (jimmyz) 

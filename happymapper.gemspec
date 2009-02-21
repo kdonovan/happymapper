@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{happymapper}
-  s.version = "0.3.2"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["John Nunemaker"]
-  s.date = %q{2009-02-19}
+  s.date = %q{2009-02-21}
   s.description = %q{object to xml mapping library}
   s.email = %q{nunemaker@gmail.com}
   s.extra_rdoc_files = ["lib/happymapper/attribute.rb", "lib/happymapper/element.rb", "lib/happymapper/item.rb", "lib/happymapper/version.rb", "lib/happymapper.rb", "README", "TODO"]
