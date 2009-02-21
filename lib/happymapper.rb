@@ -20,8 +20,9 @@ module HappyMapper
   end
   
   def to_xml
-    node = to_xml_node
-    node.to_s
+    doc = LibXML::XML::Document.new
+    doc.root = to_xml_node
+    doc.to_s
   end
   
   def to_xml_node(root_node = nil)

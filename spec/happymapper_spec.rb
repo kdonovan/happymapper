@@ -595,6 +595,12 @@ describe HappyMapper do
       doc.should match_xpath("/address/country","Germany")
     end
     
+    it "should include an xml version/encoding header" do
+      address = Address.new
+      xml = address.to_xml
+      xml.should =~ /<?xml version=".*" encoding=".*"?>/
+    end
+    
     it "should return xml with non-primitive elements from ruby objects" do
       posts = Posts.parse(fixture_file('posts.xml'))
       xml = posts.to_xml
