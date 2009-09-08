@@ -16,6 +16,7 @@ module HappyMapper
   def self.included(base)
     base.instance_variable_set("@attributes", {})
     base.instance_variable_set("@elements", {})
+    base.send :attr_accessor,  :raw_xml
     base.extend ClassMethods
   end
   
@@ -56,6 +57,18 @@ module HappyMapper
   end
 
   module ClassMethods
+    # Control storing of raw XML data (off by default, but can be useful in certain situations)
+    @store_raw_xml = false
+
+    # Tell HappyMapper to store the raw XML in the appropriately-named raw_xml instance variable when parsing
+    def archive_raw_xml
+      @store_raw_xml = true
+    end
+    
+    def store_raw_xml?
+      @store_raw_xml
+    end
+    
     def attribute(name, type, options={})
       attribute = Attribute.new(name, type, options)
       @attributes[to_s] ||= []
@@ -163,6 +176,7 @@ module HappyMapper
       nodes = node.find(xpath)
       collection = nodes.collect do |n|
         obj = new
+        obj.raw_xml = n.to_s if obj.class.store_raw_xml?
 
         attributes.each do |attr|
           obj.send("#{attr.method_name}=",
@@ -186,7 +200,19 @@ module HappyMapper
         collection
       end
     end
+    
+    # Load for custom Marshaling
+    def _load(xml_str)
+      self.parse(xml_str)
+    end
   end
+  
+  # Define _load and _dump to allow Marshaling of HappyMapper objects.  Note that this isn't as efficient as a 
+  # binary data store could be, but such is the nature of XML.
+  def _dump(depth)
+    @raw_xml || self.to_xml
+  end
+  
 end
 
 require 'happymapper/item'
